@@ -664,7 +664,7 @@
             Оставьте контакты, чтобы получить templates pack, программу workshop
             и приглашение в первую группу.
           </p>
-          <form id="waitlist-form" style="display:grid;gap:14px;max-width:520px;margin:20px 0 0;">
+          <form id="waitlist-form" action="https://formspree.io/f/xjgpkppr" method="POST" style="display:grid;gap:14px;max-width:520px;margin:20px 0 0;">
             <input type="text" name="name" placeholder="Имя и фамилия" required
               style="padding:12px 16px;border-radius:12px;border:1px solid rgba(247,241,230,0.2);background:rgba(255,255,255,0.08);color:#f7f1e6;font-size:16px;outline:none;">
             <input type="email" name="email" placeholder="Email" required
@@ -706,14 +706,29 @@
     <script>
       document.getElementById('waitlist-form').addEventListener('submit', function(e) {
         e.preventDefault();
-        const data = Object.fromEntries(new FormData(this));
-        // Store locally and show success — replace with real backend later
-        const leads = JSON.parse(localStorage.getItem('waitlist') || '[]');
-        leads.push({...data, ts: new Date().toISOString()});
-        localStorage.setItem('waitlist', JSON.stringify(leads));
-        this.style.display = 'none';
-        document.getElementById('form-success').style.display = 'block';
-        console.log('New lead:', data);
+        const form = this;
+        const btn = form.querySelector('button[type="submit"]');
+        btn.disabled = true;
+        btn.textContent = 'Отправляю...';
+
+        fetch(form.action, {
+          method: 'POST',
+          body: new FormData(form),
+          headers: { 'Accept': 'application/json' }
+        }).then(function(res) {
+          if (res.ok) {
+            form.style.display = 'none';
+            document.getElementById('form-success').style.display = 'block';
+          } else {
+            btn.disabled = false;
+            btn.textContent = 'Записаться в beta-когорту';
+            alert('Ошибка отправки. Попробуйте ещё раз или напишите в Telegram.');
+          }
+        }).catch(function() {
+          btn.disabled = false;
+          btn.textContent = 'Записаться в beta-когорту';
+          alert('Ошибка сети. Попробуйте ещё раз или напишите в Telegram.');
+        });
       });
     </script>
   </body>
