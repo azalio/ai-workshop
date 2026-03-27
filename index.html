@@ -1,0 +1,595 @@
+<!DOCTYPE html>
+<html lang="ru">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>AI-Driven Engineering Workshop</title>
+    <style>
+      :root {
+        --bg: #f4efe4;
+        --paper: rgba(255, 252, 245, 0.82);
+        --ink: #18211d;
+        --muted: #51615a;
+        --accent: #c24f2f;
+        --accent-dark: #8e2f17;
+        --line: rgba(24, 33, 29, 0.12);
+        --card-shadow: 0 18px 44px rgba(67, 44, 18, 0.12);
+        --radius: 22px;
+      }
+
+      * {
+        box-sizing: border-box;
+      }
+
+      html {
+        scroll-behavior: smooth;
+      }
+
+      body {
+        margin: 0;
+        color: var(--ink);
+        background:
+          radial-gradient(circle at top left, rgba(194, 79, 47, 0.14), transparent 32%),
+          radial-gradient(circle at 85% 20%, rgba(53, 89, 72, 0.18), transparent 28%),
+          linear-gradient(180deg, #efe3c9 0%, #f4efe4 35%, #f7f4ed 100%);
+        font-family: "Avenir Next", "Segoe UI", sans-serif;
+        line-height: 1.55;
+      }
+
+      .wrap {
+        width: min(1120px, calc(100% - 32px));
+        margin: 0 auto;
+      }
+
+      .hero {
+        padding: 48px 0 28px;
+      }
+
+      .hero-grid {
+        display: grid;
+        grid-template-columns: 1.3fr 0.9fr;
+        gap: 28px;
+        align-items: stretch;
+      }
+
+      .hero-main,
+      .hero-side,
+      .section-card,
+      .price-card,
+      .faq-card {
+        background: var(--paper);
+        border: 1px solid var(--line);
+        border-radius: var(--radius);
+        box-shadow: var(--card-shadow);
+        backdrop-filter: blur(10px);
+      }
+
+      .hero-main {
+        padding: 36px;
+      }
+
+      .hero-side {
+        padding: 28px;
+      }
+
+      .eyebrow {
+        display: inline-block;
+        margin-bottom: 18px;
+        padding: 8px 12px;
+        border-radius: 999px;
+        background: rgba(194, 79, 47, 0.1);
+        color: var(--accent-dark);
+        font-size: 13px;
+        letter-spacing: 0.06em;
+        text-transform: uppercase;
+      }
+
+      h1,
+      h2,
+      h3 {
+        font-family: "Iowan Old Style", "Palatino Linotype", "Book Antiqua", serif;
+        font-weight: 700;
+        line-height: 1.06;
+        margin: 0 0 16px;
+      }
+
+      h1 {
+        font-size: clamp(42px, 6vw, 72px);
+        max-width: 10ch;
+      }
+
+      h2 {
+        font-size: clamp(28px, 3.2vw, 42px);
+      }
+
+      h3 {
+        font-size: 24px;
+      }
+
+      p {
+        margin: 0 0 16px;
+        color: var(--muted);
+        font-size: 18px;
+      }
+
+      .hero-copy {
+        max-width: 42rem;
+      }
+
+      .cta-row {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 12px;
+        margin-top: 26px;
+      }
+
+      .btn {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        min-height: 48px;
+        padding: 12px 18px;
+        border-radius: 999px;
+        border: 1px solid transparent;
+        text-decoration: none;
+        font-weight: 700;
+        transition: transform 160ms ease, box-shadow 160ms ease, background 160ms ease;
+      }
+
+      .btn:hover {
+        transform: translateY(-1px);
+      }
+
+      .btn-primary {
+        background: var(--accent);
+        color: #fff9f4;
+        box-shadow: 0 12px 30px rgba(194, 79, 47, 0.25);
+      }
+
+      .btn-secondary {
+        color: var(--ink);
+        border-color: var(--line);
+        background: rgba(255, 255, 255, 0.35);
+      }
+
+      .meta-list,
+      .bullet-list,
+      .session-list,
+      .artifact-list,
+      .faq-list {
+        list-style: none;
+        margin: 0;
+        padding: 0;
+      }
+
+      .meta-list li,
+      .bullet-list li,
+      .session-list li,
+      .artifact-list li,
+      .faq-list li {
+        padding: 12px 0;
+        border-bottom: 1px solid var(--line);
+      }
+
+      .meta-list li:last-child,
+      .bullet-list li:last-child,
+      .session-list li:last-child,
+      .artifact-list li:last-child,
+      .faq-list li:last-child {
+        border-bottom: none;
+      }
+
+      .meta-label {
+        display: block;
+        color: var(--muted);
+        font-size: 13px;
+        text-transform: uppercase;
+        letter-spacing: 0.08em;
+        margin-bottom: 4px;
+      }
+
+      .section {
+        padding: 16px 0 18px;
+      }
+
+      .section-grid {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 22px;
+      }
+
+      .section-card,
+      .price-card,
+      .faq-card {
+        padding: 28px;
+      }
+
+      .section-card p:last-child {
+        margin-bottom: 0;
+      }
+
+      .program-grid,
+      .artifacts-grid,
+      .pricing-grid,
+      .faq-grid {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 22px;
+      }
+
+      .session-tag,
+      .price-tag {
+        display: inline-block;
+        margin-bottom: 14px;
+        padding: 7px 12px;
+        border-radius: 999px;
+        background: rgba(24, 33, 29, 0.06);
+        font-size: 13px;
+        text-transform: uppercase;
+        letter-spacing: 0.08em;
+      }
+
+      .price {
+        font-size: 42px;
+        color: var(--ink);
+        margin: 8px 0 4px;
+        font-family: "Iowan Old Style", "Palatino Linotype", "Book Antiqua", serif;
+      }
+
+      .accent-line {
+        margin: 10px 0 18px;
+        width: 72px;
+        height: 3px;
+        border-radius: 999px;
+        background: linear-gradient(90deg, var(--accent), rgba(194, 79, 47, 0.16));
+      }
+
+      .footer-cta {
+        padding: 22px 0 56px;
+      }
+
+      .footer-card {
+        padding: 32px;
+        border-radius: var(--radius);
+        background: linear-gradient(135deg, #18211d, #26352e);
+        color: #f7f1e6;
+        box-shadow: 0 22px 46px rgba(17, 23, 20, 0.24);
+      }
+
+      .footer-card p,
+      .footer-card li {
+        color: rgba(247, 241, 230, 0.82);
+      }
+
+      .footer-card .btn-secondary {
+        color: #f7f1e6;
+        border-color: rgba(247, 241, 230, 0.2);
+        background: rgba(255, 255, 255, 0.06);
+      }
+
+      .small {
+        font-size: 14px;
+      }
+
+      code {
+        padding: 2px 6px;
+        border-radius: 8px;
+        background: rgba(24, 33, 29, 0.06);
+        font-family: "SFMono-Regular", "Menlo", monospace;
+        font-size: 0.9em;
+      }
+
+      @media (max-width: 900px) {
+        .hero-grid,
+        .section-grid,
+        .program-grid,
+        .artifacts-grid,
+        .pricing-grid,
+        .faq-grid {
+          grid-template-columns: 1fr;
+        }
+
+        .hero-main,
+        .hero-side,
+        .section-card,
+        .price-card,
+        .faq-card,
+        .footer-card {
+          padding: 24px;
+        }
+
+        p {
+          font-size: 17px;
+        }
+
+        .hero {
+          padding-top: 26px;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <header class="hero">
+      <div class="wrap hero-grid">
+        <section class="hero-main">
+          <span class="eyebrow">Live Beta Cohort</span>
+          <h1>AI-Driven Engineering</h1>
+          <p class="hero-copy">
+            Практический workshop для backend, platform, DevOps и SRE инженеров. Не про "как писать
+            промпты", а про то, как встроить LLM в инженерный процесс через
+            <code>SPEC -&gt; PLAN -&gt; TEST -&gt; CODE -&gt; REVIEW -&gt; LEARN</code>.
+          </p>
+          <div class="cta-row">
+            <a class="btn btn-primary" href="#waitlist">Записаться в beta-когорту</a>
+            <a class="btn btn-secondary" href="https://t.me/azalio">Получить шаблоны и программу</a>
+          </div>
+        </section>
+
+        <aside class="hero-side">
+          <h3>Формат</h3>
+          <ul class="meta-list">
+            <li>
+              <span class="meta-label">Даты</span>
+              16, 21 и 23 апреля 2026
+            </li>
+            <li>
+              <span class="meta-label">Время</span>
+              19:00-21:00 по Москве
+            </li>
+            <li>
+              <span class="meta-label">Формат</span>
+              3 x 2 часа, live online
+            </li>
+            <li>
+              <span class="meta-label">Для кого</span>
+              Backend, platform, DevOps, SRE, team leads
+            </li>
+            <li>
+              <span class="meta-label">Что включено</span>
+              Записи, шаблоны, чат участников
+            </li>
+          </ul>
+        </aside>
+      </div>
+    </header>
+
+    <main>
+      <section class="section">
+        <div class="wrap section-grid">
+          <article class="section-card">
+            <h2>Проблема</h2>
+            <div class="accent-line"></div>
+            <p>
+              LLM ускоряет написание кода. Но на сложных системах это часто заканчивается хаосом.
+            </p>
+            <ul class="bullet-list">
+              <li>Код появляется быстро, но diff становятся неревьюабельными.</li>
+              <li>Модель молча принимает архитектурные решения.</li>
+              <li>Review превращается в cleanup generated changes.</li>
+              <li>Скорость локально растет, а управляемость команды падает.</li>
+            </ul>
+          </article>
+
+          <article class="section-card">
+            <h2>Что вы получите</h2>
+            <div class="accent-line"></div>
+            <p>
+              Вы получите не "еще один курс по AI", а рабочий инженерный workflow, который можно
+              перенести в свою кодовую базу.
+            </p>
+            <ul class="bullet-list">
+              <li>Понятный <code>SPEC.md</code> вместо размытой постановки.</li>
+              <li><code>PLAN.md</code> с PRE/POST conditions и done checks.</li>
+              <li>Небольшие проверяемые изменения вместо одного огромного промпта.</li>
+              <li>Verify -&gt; fix -&gt; verify цикл перед review и merge.</li>
+            </ul>
+          </article>
+        </div>
+      </section>
+
+      <section class="section">
+        <div class="wrap">
+          <article class="section-card">
+            <h2>Программа</h2>
+            <div class="accent-line"></div>
+            <div class="program-grid">
+              <div class="section-card">
+                <span class="session-tag">Сессия 1</span>
+                <h3>SPEC + PLAN</h3>
+                <ul class="session-list">
+                  <li>Почему чатовый подход ломается на production-задачах</li>
+                  <li>Как писать spec, чтобы AI не решал за вас</li>
+                  <li>Decomposition, constraints, acceptance criteria, risk points</li>
+                  <li>Практика на реальном кейсе</li>
+                </ul>
+              </div>
+              <div class="section-card">
+                <span class="session-tag">Сессия 2</span>
+                <h3>TEST + CODE</h3>
+                <ul class="session-list">
+                  <li>Как разбивать реализацию на маленькие изменения</li>
+                  <li>Как задавать контекст и ограничения</li>
+                  <li>Test-first и quality gates</li>
+                  <li>Verify -&gt; fix -&gt; verify loop</li>
+                </ul>
+              </div>
+              <div class="section-card">
+                <span class="session-tag">Сессия 3</span>
+                <h3>REVIEW + LEARN</h3>
+                <ul class="session-list">
+                  <li>Как ревьюить AI-generated diff</li>
+                  <li>Что проверять до merge</li>
+                  <li>Как фиксировать знания, контекст и правила</li>
+                  <li>Как перенести workflow в свою команду</li>
+                </ul>
+              </div>
+              <div class="section-card">
+                <span class="session-tag">Результат</span>
+                <h3>Артефакты на выходе</h3>
+                <ul class="artifact-list">
+                  <li>Шаблон <code>SPEC.md</code></li>
+                  <li>Шаблон <code>PLAN.md</code></li>
+                  <li>Project context template</li>
+                  <li>Review checklist и verification loop</li>
+                </ul>
+              </div>
+            </div>
+          </article>
+        </div>
+      </section>
+
+      <section class="section">
+        <div class="wrap artifacts-grid">
+          <article class="section-card">
+            <h2>Для кого</h2>
+            <div class="accent-line"></div>
+            <ul class="bullet-list">
+              <li>Middle+ backend developers</li>
+              <li>Senior engineers</li>
+              <li>Platform engineers</li>
+              <li>DevOps / SRE</li>
+              <li>Team leads, которые сами кодят</li>
+            </ul>
+          </article>
+
+          <article class="section-card">
+            <h2>Не для кого</h2>
+            <div class="accent-line"></div>
+            <ul class="bullet-list">
+              <li>Для людей, которым нужен обзор моделей и теории LLM</li>
+              <li>Для low-code / no-code сценариев</li>
+              <li>Для тех, кто хочет только "генерировать код по одной фразе"</li>
+            </ul>
+          </article>
+        </div>
+      </section>
+
+      <section class="section">
+        <div class="wrap pricing-grid">
+          <article class="price-card">
+            <span class="price-tag">Early Bird</span>
+            <h3>Первая beta-когорта</h3>
+            <div class="price">19 900 ₽</div>
+            <p>До 9 апреля 2026</p>
+            <ul class="bullet-list">
+              <li>3 live sessions</li>
+              <li>Записи</li>
+              <li>Чат участников</li>
+              <li>Templates pack</li>
+            </ul>
+          </article>
+
+          <article class="price-card">
+            <span class="price-tag">Standard</span>
+            <h3>После early bird</h3>
+            <div class="price">24 900 ₽</div>
+            <p>Обычная цена первой группы</p>
+            <ul class="bullet-list">
+              <li>Тот же пакет материалов</li>
+              <li>Тот же формат</li>
+              <li>Подходит individual участникам и небольшим командам</li>
+            </ul>
+          </article>
+        </div>
+      </section>
+
+      <section class="section">
+        <div class="wrap faq-grid">
+          <article class="faq-card">
+            <h2>FAQ</h2>
+            <div class="accent-line"></div>
+            <ul class="faq-list">
+              <li>
+                <strong>Это только про Claude Code?</strong><br />
+                Нет. Workflow tool-agnostic и применим к Claude Code, Codex, Cursor и другим AI
+                coding tools.
+              </li>
+              <li>
+                <strong>Будет ли код?</strong><br />
+                Да. Но акцент не на копировании демо, а на процессе инженерных решений и валидации.
+              </li>
+              <li>
+                <strong>Это подойдет для команды?</strong><br />
+                Да. После beta есть отдельный corporate workshop.
+              </li>
+            </ul>
+          </article>
+
+          <article class="faq-card">
+            <h2>Почему мне можно верить</h2>
+            <div class="accent-line"></div>
+            <p>
+              Материал вырос не из toy examples, а из реальной инженерной практики:
+            </p>
+            <ul class="bullet-list">
+              <li>собственного framework для structured AI development workflow</li>
+              <li>production-кейса для DevOpsConf 2026</li>
+              <li>реальной работы с артефактами: <code>SPEC</code>, <code>PLAN</code>, <code>TEST</code>, <code>CODE</code>, <code>REVIEW</code>, <code>LEARN</code></li>
+            </ul>
+          </article>
+        </div>
+      </section>
+    </main>
+
+    <section class="footer-cta" id="waitlist">
+      <div class="wrap">
+        <div class="footer-card">
+          <h2>Не забирайте только идею. Заберите workflow.</h2>
+          <p>
+            Оставьте контакты, чтобы получить templates pack, программу workshop
+            и приглашение в первую группу.
+          </p>
+          <form id="waitlist-form" style="display:grid;gap:14px;max-width:520px;margin:20px 0 0;">
+            <input type="text" name="name" placeholder="Имя и фамилия" required
+              style="padding:12px 16px;border-radius:12px;border:1px solid rgba(247,241,230,0.2);background:rgba(255,255,255,0.08);color:#f7f1e6;font-size:16px;outline:none;">
+            <input type="email" name="email" placeholder="Email" required
+              style="padding:12px 16px;border-radius:12px;border:1px solid rgba(247,241,230,0.2);background:rgba(255,255,255,0.08);color:#f7f1e6;font-size:16px;outline:none;">
+            <input type="text" name="telegram" placeholder="Telegram (@username)" required
+              style="padding:12px 16px;border-radius:12px;border:1px solid rgba(247,241,230,0.2);background:rgba(255,255,255,0.08);color:#f7f1e6;font-size:16px;outline:none;">
+            <select name="role" required
+              style="padding:12px 16px;border-radius:12px;border:1px solid rgba(247,241,230,0.2);background:rgba(255,255,255,0.08);color:#f7f1e6;font-size:16px;outline:none;">
+              <option value="" disabled selected style="color:#888;">Роль</option>
+              <option value="backend">Backend developer</option>
+              <option value="platform">Platform engineer</option>
+              <option value="devops">DevOps / SRE</option>
+              <option value="teamlead">Team lead / Manager</option>
+              <option value="other">Другое</option>
+            </select>
+            <input type="text" name="company" placeholder="Компания"
+              style="padding:12px 16px;border-radius:12px;border:1px solid rgba(247,241,230,0.2);background:rgba(255,255,255,0.08);color:#f7f1e6;font-size:16px;outline:none;">
+            <select name="interest"
+              style="padding:12px 16px;border-radius:12px;border:1px solid rgba(247,241,230,0.2);background:rgba(255,255,255,0.08);color:#f7f1e6;font-size:16px;outline:none;">
+              <option value="" disabled selected style="color:#888;">Интерес</option>
+              <option value="individual">Individual participant</option>
+              <option value="team">Team lead / team purchase</option>
+              <option value="corporate">Corporate workshop</option>
+            </select>
+            <button type="submit" class="btn btn-primary" style="cursor:pointer;font-size:16px;border:none;">
+              Записаться в beta-когорту
+            </button>
+          </form>
+          <div id="form-success" style="display:none;margin-top:20px;">
+            <p style="color:#f7f1e6;font-size:18px;font-weight:700;">Спасибо! Вы в списке.</p>
+            <p>В ближайшее время вы получите templates pack, checklist и программу workshop.</p>
+          </div>
+          <p class="small" style="margin-top:16px;">
+            Или напишите напрямую: <a href="https://t.me/azalio" style="color:#f7f1e6;">Telegram @azalio</a>
+          </p>
+        </div>
+      </div>
+    </section>
+    <script>
+      document.getElementById('waitlist-form').addEventListener('submit', function(e) {
+        e.preventDefault();
+        const data = Object.fromEntries(new FormData(this));
+        // Store locally and show success — replace with real backend later
+        const leads = JSON.parse(localStorage.getItem('waitlist') || '[]');
+        leads.push({...data, ts: new Date().toISOString()});
+        localStorage.setItem('waitlist', JSON.stringify(leads));
+        this.style.display = 'none';
+        document.getElementById('form-success').style.display = 'block';
+        console.log('New lead:', data);
+      });
+    </script>
+  </body>
+</html>
